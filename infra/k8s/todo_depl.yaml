@@ -7,10 +7,10 @@ spec:
   selector:
     matchLabels:
       app: todo
-  template:
+  template: # this will apply a label (an identifier to the pod that is going to be created)
     metadata:
       labels:
-        app: todo
+        app: todo # this is the label
     spec:
       containers:
         - name: todo
