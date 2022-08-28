@@ -2,10 +2,8 @@ from fastapi import FastAPI
 from pymongo import MongoClient
 
 
-client = MongoClient(host="0.0.0.0",
-                     port=27017,
-                     username="admin",
-                     password="admin"
+client = MongoClient(host="database-clusterip-srv",
+                     port=27017
                      )
 
 db = client["query"]

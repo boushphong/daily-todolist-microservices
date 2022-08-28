@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: note-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: note
+  template: # this will apply a label (an identifier to the pod that is going to be created)
+    metadata:
+      labels:
+        app: note # this is the label
+    spec:
+      containers:
+        - name: query
+          image: note_image:0.0.1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: note-clusterip-srv # name of the service
+spec:
+  type: ClusterIP
+  selector: # select label from template in deployment yaml file
+    app: note # This is the label going to be chosen
+  ports:
+    - name: note-clusterip-service # doesn't matter too much
+      protocol: TCP
+      port: 8001 # port to be exposed to the node (VM). (not outside world (this will be randomly assigned))
+      targetPort: 8001 # port that the application runs on the pod
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: note-srv # name of the service
+spec:
+  type: NodePort
+  selector: # select label from template in deployment yaml file
+    app: note # This is the label going to be chosen
+  ports:
+    - name: note-service # doesn't matter too much
+      protocol: TCP
+      port: 8001 # port to be exposed to the node (VM). (not outside world (this will be randomly assigned))
+      targetPort: 8001 # port that the application runs on the pod

@@ -1,24 +1,26 @@
 from pymongo import MongoClient
 from confluent_kafka import Consumer
+from datetime import datetime
 
 
-client = MongoClient(host="0.0.0.0",
+def today():
+    return str(datetime.today().strftime('%Y-%m-%d'))
+
+
+client = MongoClient(host="database-clusterip-srv",
                      port=27017,
-                     username="admin",
-                     password="admin"
                      )
 
 db = client["query"]
 collection = db["query_collections"]
 
-reminder_consumer = Consumer({"bootstrap.servers": "localhost:9092",
+reminder_consumer = Consumer({"bootstrap.servers": "kafka-svc:9092",
                               "group.id": "FastAPI",
                               "enable.auto.commit": True,
                               "auto.offset.reset": "beginning"})
 reminder_consumer.subscribe(["reminders"])
 
-
-note_consumer = Consumer({"bootstrap.servers": "localhost:9092",
+note_consumer = Consumer({"bootstrap.servers": "kafka-svc:9092",
                           "group.id": "FastAPI",
                           "enable.auto.commit": False,
                           "auto.offset.reset": "beginning"})
@@ -33,17 +35,23 @@ def event_stream():
             message = msg.value().decode("utf-8")
             print(message)
             message_seperated = message.split(sep=",")
-            collection.insert_one({
-                "date": message_seperated[0],
-                "to_do": message_seperated[1],
-                "note": []
-            })
+            try:
+                collection.insert_one({
+                    "date": message_seperated[0],
+                    "to_do": message_seperated[1],
+                    "note": []
+                })
+            except:  # horrible code (change later)
+                pass
         elif notes is not None:
             notes = notes.value().decode("utf-8")
             print(notes)
-            notes_seperated = notes.split(sep=",")
-            collection.update_one({"date": "2022-08-26"},
-                                  {"$push": {"note": {"$each": [f"{notes_seperated[1]}"]}}})
+            try:
+                notes_seperated = notes.split(sep=",")
+                collection.update_one({"date": f"{today()}"},
+                                      {"$push": {"note": {"$each": [f"{notes_seperated[1]}"]}}})
+            except:  # horrible code (change later)
+                pass
         elif msg is None:
             pass
         else:

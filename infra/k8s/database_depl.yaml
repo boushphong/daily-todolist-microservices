@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: database-depl
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: database
+  template: # this will apply a label (an identifier to the pod that is going to be created)
+    metadata:
+      labels:
+        app: database # this is the label
+    spec:
+      containers:
+        - name: database
+          image: database_image:0.0.1 # Local image
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-clusterip-srv
+spec:
+  selector:
+    app: database
+  type: ClusterIP
+  ports:
+    - name: database-clusterip-service
+      protocol: TCP
+      port: 27017
+      targetPort: 27017
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: database-srv
+spec:
+  selector:
+    app: database
+  type: NodePort
+  ports:
+    - name: database-service
+      protocol: TCP
+      port: 27017
+      targetPort: 27017

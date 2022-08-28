@@ -7,17 +7,15 @@ from confluent_kafka import Producer
 
 app = FastAPI()
 
-producer = Producer({'bootstrap.servers': 'localhost:9092'})
+producer = Producer({"bootstrap.servers": "kafka-svc:9092"})
 
 
 class ToDo(BaseModel):
     to_do: str
 
 
-client = MongoClient(host="0.0.0.0",
-                     port=27017,
-                     username="admin",
-                     password="admin"
+client = MongoClient(host="database-clusterip-srv",
+                     port=27017
                      )
 
 db = client["reminder"]
