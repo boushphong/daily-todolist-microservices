@@ -2,3 +2,5 @@
 *.iml
 FastAPI
 *.http
+*/__pycache__
+__pycache__
