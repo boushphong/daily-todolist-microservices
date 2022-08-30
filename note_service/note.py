@@ -26,7 +26,7 @@ def today():
     return str(datetime.today().strftime('%Y-%m-%d'))
 
 
-@app.post("/")
+@app.post("/note/create")
 def new_note(note: Note, date: Optional[str] = today()):
     collection.insert_one({
         "date": date,

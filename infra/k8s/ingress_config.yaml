@@ -5,15 +5,31 @@ metadata:
   name: ingress-srv
   annotations:
     kubernetes.io/ingress.class: nginx
+#    nginx.ingress.kubernetes.io/use-regex: 'true' # Path expression for /todo/?(.*)/create (Dynamic path)
 spec:
   rules: # Routing rule
     - host: todo.com # Add (127.0.0.1 todo.com in host file)
       http:
         paths:
-          - path: /
+          - path: /todo
             pathType: Prefix
             backend:
               service:
                 name: todo-clusterip-srv # use name of the service
                 port:
                   number: 8000
+#          - path: /todo/?(.*)/create # Dynamic path
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: query-clusterip-srv # use name of the service
+                port:
+                  number: 8002
+          - path: /note
+            pathType: Prefix
+            backend:
+              service:
+                name: note-clusterip-srv # use name of the service
+                port:
+                  number: 8001

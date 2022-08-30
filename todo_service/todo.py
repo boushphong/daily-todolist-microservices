@@ -26,7 +26,7 @@ def today():
     return datetime.today().strftime('%Y-%m-%d')
 
 
-@app.post("/")
+@app.post("/todo/create")
 def new_reminder(reminder: ToDo, date: Optional[str] = today()):
     if not collection.find_one():
         collection.insert_one({
@@ -39,7 +39,7 @@ def new_reminder(reminder: ToDo, date: Optional[str] = today()):
         return "To do list for today has already been created"
 
 
-@app.get("/")
+@app.get("/todo/view")  # This method can be removed
 def root():
     if collection.find_one():
         return str(collection.find_one())
@@ -48,6 +48,6 @@ def root():
     # return {"message": "Reminder API"}
 
 
-@app.get("/hello")
+@app.get("/todo/")
 def sayhello():
-    return "Hello World"
+    return "Hello world from todo service"

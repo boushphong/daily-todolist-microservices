@@ -23,4 +23,4 @@ def root():
 
 @app.get("/hello")
 def sayhello():
-    return "Hello World"
+    return "Hello From Query Service"
