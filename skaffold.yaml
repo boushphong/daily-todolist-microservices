@@ -1,0 +1,39 @@
+# Run skaffold dev to apply
+apiVersion: skaffold/v2alpha3
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - ./infra/k8s/note_depl.yaml
+      - ./infra/k8s/query_depl.yaml
+      - ./infra/k8s/todo_depl.yaml
+build:
+  local:
+    push: false # disable push
+  artifacts:
+    - image: todo_image # docker image
+      context: todo_service # Folder which file are resigned in to build an image of
+      docker:
+        dockerfile: Dockerfile # build with Dockerfile
+      sync:
+        manual: # File to track changes of. changes will be synchronized in Docker image.
+          - src: '*.py' # Any change to file that doesn't match this pattern will trigger an Image rebuild
+            dest: . # Only apply to app like nodemon, uvicorn which automatically restart your webapp
+
+    - image: note_image # docker image
+      context: note_service # Folder which file are resigned in to build an image of
+      docker:
+        dockerfile: Dockerfile # build with Dockerfile
+      sync:
+        manual: # File to track changes of. changes will be synchronized in Docker image.
+          - src: '*.py' # Any change to file that doesn't match this pattern will trigger an Image rebuild
+            dest: .
+
+    - image: query_image # docker image
+      context: query_service # Folder which file are resigned in to build an image of
+      docker:
+        dockerfile: Dockerfile # build with Dockerfile
+      sync:
+        manual: # File to track changes of. changes will be synchronized in Docker image.
+          - src: '*.py' # Any change to file that doesn't match this pattern will trigger an Image rebuild
+            dest: .
