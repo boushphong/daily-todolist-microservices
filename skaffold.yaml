@@ -16,9 +16,9 @@ build:
       docker:
         dockerfile: Dockerfile # build with Dockerfile
       sync:
-        manual: # File to track changes of. changes will be synchronized in Docker image.
+        manual: # File to track changes of. changes will be synchronized in Docker image. Only apply to app like (nodemon, uvicorn) which automatically restart your webapp
           - src: '*.py' # Any change to file that doesn't match this pattern will trigger an Image rebuild
-            dest: . # Only apply to app like nodemon, uvicorn which automatically restart your webapp
+            dest: .
 
     - image: note_image # docker image
       context: note_service # Folder which file are resigned in to build an image of
