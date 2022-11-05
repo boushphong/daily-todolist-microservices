@@ -33,7 +33,7 @@ def new_reminder(reminder: ToDo, date: Optional[str] = today()):
             "date": date,
             "to_do": reminder.to_do,
         })
-        producer.produce("remindersdock", value=f"{date},{reminder.to_do}")
+        producer.produce("reminders", value=f"{date},{reminder.to_do}")
         return reminder
     else:
         return "To do list for today has already been created"
