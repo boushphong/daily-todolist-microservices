@@ -13,7 +13,7 @@ spec:
         app: note # this is the label
     spec:
       containers:
-        - name: query
+        - name: note
           image: note_image:0.0.1
 ---
 apiVersion: v1

@@ -5,10 +5,7 @@ WORKDIR /app
 RUN apt-get update --allow-unauthenticated -yqq && \
 	  apt-get upgrade --allow-unauthenticated -yqq && \
     apt-get install --allow-unauthenticated -yqq --no-install-recommends \
-	  curl \
-    librdkafka-dev \
-    gcc \
-    libc-dev
+	  curl
 
 COPY requirements.txt ./
 
